@@ -1,4 +1,4 @@
-use std::{io::Write, process::Command, time::Instant};
+use std::{process::Command, time::Instant};
 
 fn main() {
     let args = std::env::args().collect::<Vec<_>>();
@@ -11,10 +11,9 @@ fn main() {
         command = command.args(&args[2..]);
     }
     let start = Instant::now();
-    let output = command.output().expect("Failed to execute process");
+    let mut process = command.spawn().expect("Failed to execute process");
+    let _status = process.wait().expect("Failed to wait on the child process");
     let length = start.elapsed();
-    std::io::stdout().write(&output.stdout).unwrap();
-    std::io::stderr().write(&output.stderr).unwrap();
     let total_seconds = length.as_secs();
     let total_minutes = total_seconds / 60;
     let hours_component = total_minutes / 60;
@@ -32,6 +31,6 @@ fn main() {
     if seconds_component > 0 {
         message.push_str(&format!("{} seconds ", seconds_component));
     }
-    message.push_str(&format!("{} milliseconds ", millis_component));
+    message.push_str(&format!("{} milliseconds", millis_component));
     println!("{} elapsed", message);
 }
