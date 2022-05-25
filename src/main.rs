@@ -19,7 +19,7 @@ fn main() {
     let hours_component = total_minutes / 60;
     let minutes_component = total_minutes - (hours_component * 60);
     let seconds_component = total_seconds - (total_minutes * 60);
-    let millis_component = length.as_millis() - (seconds_component as u128 * 1000);
+    let millis_component = length.as_millis() - (total_seconds as u128 * 1000);
     println!("");
     let mut message = String::new();
     if hours_component > 0 {
